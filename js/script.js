@@ -65,20 +65,28 @@ async function getWeather(city) {
             const weatherCode = currentWeather.weather_code; /*after searching, discovered each weather code corresponds to a specific condition */
             if (weatherCode === 0) {
                 conditions.textContent = "Clear sky";
+                weatherIcon.textContent = "☀️";
             } else if (weatherCode === 1 || weatherCode === 2 || weatherCode === 3) {
                 conditions.textContent = "Partly cloudy or overcast";
+                weatherIcon.textContent = "⛅";
             } else if (weatherCode === 45 || weatherCode === 48) {
                 conditions.textContent = "Fog";
+                weatherIcon.textContent = "🌫️";
             } else if (weatherCode >= 51 && weatherCode <= 55) {
                 conditions.textContent = "Drizzle";
+                weatherIcon.textContent = "🌦️";
             } else if (weatherCode >= 61 && weatherCode <= 65) {
                 conditions.textContent = "Rain";
+                weatherIcon.textContent = "🌧️";
             } else if (weatherCode >= 71 && weatherCode <= 75) {
                 conditions.textContent = "Snow";
+                weatherIcon.textContent = "❄️";
             } else if (weatherCode >= 80 && weatherCode <= 82) {
                 conditions.textContent = "Rain showers";
+                weatherIcon.textContent = "🌧️";
             } else if (weatherCode === 95 || weatherCode === 96 || weatherCode === 99) {
                 conditions.textContent = "Thunderstorm";
+                weatherIcon.textContent = "⛈️";
             } else {
                 conditions.textContent = "Unknown weather condition";
             }
