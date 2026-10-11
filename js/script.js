@@ -23,6 +23,7 @@ if (city === "") { /* check if input is empty */
 }
 
 errorMessage.textContent = ""; /* delete the error message once adjusted */
+loadingMessage.textContent = "Loading weather...";
 getWeather(city); /* call the function to get the weather for the city */
 });
 
@@ -56,6 +57,7 @@ async function getWeather(city) {
             const weatherData = await weatherResponse.json();
             const currentWeather = weatherData.current;
 
+            loadingMessage.textContent = ""; /*clear the loading message once data found */
             cityName.textContent = cityData.name; /*display name of the city we searched for */
             temperature.textContent = currentWeather.temperature_2m + " °C"; /*display the temperature*/
             feelsLike.textContent = "Feels like: " + currentWeather.apparent_temperature + " °C";
@@ -92,10 +94,12 @@ async function getWeather(city) {
             }
 
         } else {
+            loadingMessage.textContent = ""; /*clear the loading message if no data found */
             errorMessage.textContent = "City not found. Please try another name.";
         }
 
     } catch (error) {
+        loadingMessage.textContent = ""; /*clear the loading message if request fails */
         errorMessage.textContent = "Unable to fetch city data. Please try again."; /* display error message if the request fails */
     }
 }
