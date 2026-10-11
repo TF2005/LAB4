@@ -1,34 +1,30 @@
 const cityInput = document.getElementById("cityInput");
-
+const searchForm = document.getElementById("searchForm");
 const loadingMessage = document.getElementById("loadingMessage");
-
+const errorMessage = document.getElementById("errorMessage");
 const weatherResult = document.getElementById("weatherResult");
 const cityName = document.getElementById("cityName");
 const weatherIcon = document.getElementById("weatherIcon");
 const temperature = document.getElementById("temperature");
 const conditions = document.getElementById("conditions");
-
 const feelsLike = document.getElementById("feelsLike");
 const humidity = document.getElementById("humidity");
 const windSpeed = document.getElementById("windSpeed");
 
 
-const searchForm = document.getElementById("searchForm");
 searchForm.addEventListener("submit", function (event) {
     event.preventDefault(); /* remove the browser's default refresh after submitting */
     const city = cityInput.value;
     console.log(city);
-});
 
-const errorMessage = document.getElementById("errorMessage");
 if (city === "") { /* check if input is empty */
     errorMessage.textContent = "Please enter a city name.";
     return;
 }
 
 errorMessage.textContent = ""; /* delete the error message once adjusted */
-console.log(city);
-
+getWeather(city); /* call the function to get the weather for the city */
+});
 
 async function getWeather(city) {
     try {
@@ -58,8 +54,34 @@ async function getWeather(city) {
                 throw new Error("Weather request failed");
             }
             const weatherData = await weatherResponse.json();
-            console.log(cityData.name);
-            console.log(weatherData.current);
+            const currentWeather = weatherData.current;
+
+            cityName.textContent = cityData.name; /*display name of the city we searched for */
+            temperature.textContent = currentWeather.temperature_2m + " °C"; /*display the temperature*/
+            feelsLike.textContent = "Feels like: " + currentWeather.apparent_temperature + " °C";
+            humidity.textContent = "Humidity: " + currentWeather.relative_humidity_2m + "%";
+            windSpeed.textContent = "Wind speed: " + currentWeather.wind_speed_10m + " km/h";
+            
+            const weatherCode = currentWeather.weather_code; /*after searching, discovered each weather code corresponds to a specific condition */
+            if (weatherCode === 0) {
+                conditions.textContent = "Clear sky";
+            } else if (weatherCode === 1 || weatherCode === 2 || weatherCode === 3) {
+                conditions.textContent = "Partly cloudy or overcast";
+            } else if (weatherCode === 45 || weatherCode === 48) {
+                conditions.textContent = "Fog";
+            } else if (weatherCode >= 51 && weatherCode <= 55) {
+                conditions.textContent = "Drizzle";
+            } else if (weatherCode >= 61 && weatherCode <= 65) {
+                conditions.textContent = "Rain";
+            } else if (weatherCode >= 71 && weatherCode <= 75) {
+                conditions.textContent = "Snow";
+            } else if (weatherCode >= 80 && weatherCode <= 82) {
+                conditions.textContent = "Rain showers";
+            } else if (weatherCode === 95 || weatherCode === 96 || weatherCode === 99) {
+                conditions.textContent = "Thunderstorm";
+            } else {
+                conditions.textContent = "Unknown weather condition";
+            }
 
         } else {
             errorMessage.textContent = "City not found. Please try another name.";
