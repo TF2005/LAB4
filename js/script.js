@@ -12,20 +12,28 @@ const humidity = document.getElementById("humidity");
 const windSpeed = document.getElementById("windSpeed");
 
 
+weatherResult.style.display = "none"; /*hide the weather results when the page first opens */
 searchForm.addEventListener("submit", function (event) {
     event.preventDefault(); /* remove the browser's default refresh after submitting */
     const city = cityInput.value;
     console.log(city);
 
-if (city === "") { /* check if input is empty */
-    errorMessage.textContent = "Please enter a city name.";
-    return;
-}
+    if (city === "") { /* check if input is empty */
+        errorMessage.textContent = "Please enter a city name.";
+        return;
+    }
 
-errorMessage.textContent = ""; /* delete the error message once adjusted */
-loadingMessage.textContent = "Loading weather...";
-getWeather(city); /* call the function to get the weather for the city */
+    errorMessage.textContent = ""; /* delete the error message once adjusted */
+    weatherResult.style.display = "none"; /*remove previous results when pressing search again */
+    loadingMessage.textContent = "Loading weather...";
+    getWeather(city); /* call the function to get the weather for the city */
 });
+
+
+cityInput.addEventListener("input", function () { /*remove previous results when user changes the city input*/
+    weatherResult.style.display = "none";
+});
+
 
 async function getWeather(city) {
     try {
@@ -58,12 +66,13 @@ async function getWeather(city) {
             const currentWeather = weatherData.current;
 
             loadingMessage.textContent = ""; /*clear the loading message once data found */
+            weatherResult.style.display = "block"; /*display the weather section since results were found */
             cityName.textContent = cityData.name; /*display name of the city we searched for */
             temperature.textContent = currentWeather.temperature_2m + " °C"; /*display the temperature*/
             feelsLike.textContent = "Feels like: " + currentWeather.apparent_temperature + " °C";
             humidity.textContent = "Humidity: " + currentWeather.relative_humidity_2m + "%";
             windSpeed.textContent = "Wind speed: " + currentWeather.wind_speed_10m + " km/h";
-            
+
             const weatherCode = currentWeather.weather_code; /*after searching, discovered each weather code corresponds to a specific condition */
             if (weatherCode === 0) {
                 conditions.textContent = "Clear sky";
