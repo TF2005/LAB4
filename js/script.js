@@ -36,7 +36,7 @@ async function getWeather(city) {
             name: city
         });
         const url = "https://geocoding-api.open-meteo.com/v1/search?" + params; /*created the url to fetch*/
-        const response = await fetch(url); /*fetch will send the request to the api */
+        const response = await fetch(url); /*fetch will send the request to the api to convert the city name to geocoding */
 
         if (!response.ok) { /*ok attribute is true if the request was successful*/
             throw new Error("Request failed");
@@ -45,9 +45,22 @@ async function getWeather(city) {
 
         if (data.results && data.results.length > 0) { /* check if the results array is defined and is not empty */
             const cityData = data.results[0];
+
+            const weatherParams = new URLSearchParams({
+                latitude: cityData.latitude,
+                longitude: cityData.longitude,
+                current: "temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m"
+            });
+
+            const weatherUrl = "https://api.open-meteo.com/v1/forecast?" + weatherParams; /*another request to get the weather data for the city from the geocoding infomartion response*/
+            const weatherResponse = await fetch(weatherUrl);
+            if (!weatherResponse.ok) {
+                throw new Error("Weather request failed");
+            }
+            const weatherData = await weatherResponse.json();
             console.log(cityData.name);
-            console.log(cityData.latitude);
-            console.log(cityData.longitude);
+            console.log(weatherData.current);
+
         } else {
             errorMessage.textContent = "City not found. Please try another name.";
         }
