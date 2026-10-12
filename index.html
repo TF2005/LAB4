@@ -11,34 +11,77 @@
 
 <body>
 
-    <main class="dashboard">
-        <h1>Weather Dashboard</h1>
-        <p>Search for a city to discover its current weather.</p>
+    <header class="page-header">
+        <h1>🌤️ Weather Dashboard</h1>
+        <p>Get real-time weather information for any city</p>
+    </header>
 
+    <main class="dashboard">
         <form id="searchForm">
-            <label for="cityInput">Enter a city name:</label>
-            <input type="text" id="cityInput" required>
-            <button type="submit">Search</button>
+            <input type="text" id="cityInput" placeholder="📍 Enter a city name..." required> <!--placeholder is a hint inside the input field  to guide the user and that disappear once he writes-->
+            <button type="submit">🔍︎ Search</button>
         </form>
 
         <p id="loadingMessage"></p>
         <p id="errorMessage"></p>
 
+        
+        <!-- Displays the weather information after a city is searched -->
         <section id="weatherResult">
-            <h2 id="cityName"></h2>
 
-            <div class="current-weather">
-                <p id="weatherIcon"></p>
-                <p id="temperature"></p>
-                <p id="conditions"></p>
+            <!-- Top row: City and country on the left, date and time on the right -->
+            <div class="location-time-row">
+
+                <div class="location-info">
+                    <h2 id="cityName">City Name</h2>
+                    <p id="countryName">Country</p>
+                </div>
+
+                <div class="date-time">
+                    <p id="currentDate"></p>
+                    <p id="currentTime"></p>
+                </div>
+
             </div>
 
-            <div class="weather-details">
-                <p id="feelsLike">Feels like: </p>
-                <p id="humidity">Humidity: </p>
-                <p id="windSpeed">Wind speed: </p>
+            <!-- Middle row: Current weather on the left, weather details on the right -->
+            <div class="weather-overview">
+
+                <div class="main-weather">
+                    <p id="weatherIcon"></p>
+                    <!-- Displays the temperature number and its unit separately -->
+                    <div class="temperature-display">
+                        <p id="temperature"></p>
+                        <p id="temperatureUnit">°C</p>
+                    </div>
+                    <p id="feelsLike">Feels like</p>
+                    <p id="conditions"></p>
+                </div>
+
+                <!-- The only separator: a thin vertical line -->
+                <div class="weather-divider"></div>
+
+                <div class="weather-stats">
+
+                    <div class="weather-stat">
+                        <p class="stat-label">💧 Humidity</p>
+                        <p id="humidity"></p>
+                    </div>
+
+                    <div class="weather-stat">
+                        <p class="stat-label">🌬️ Wind Speed</p>
+                        <p id="windSpeed"></p>
+                    </div>
+
+                </div>
+
             </div>
+            <div class="hourly-forecast">
+                <div id="hourlyForecastList" class="hourly-forecast-list"></div>
+            </div>
+
         </section>
+
     </main>
 
 </body>
